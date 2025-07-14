@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Identificazione</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #000000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Accesso Questionario</h1>
+
+  <form id="identification-form">
+    <label for="code">Codice Identificativo:</label>
+    <input type="text" id="code" name="code" required>
+
+    <label for="group">Seleziona Gruppo:</label>
+    <select id="group" name="group" required>
+      <option value="" disabled selected>-- Scegli un'opzione --</option>
+      <option value="gruppo1">Welt</option>
+      <option value="gruppo2">Optisolis</option>
+      <option value="gruppo3">Vitasolis 3000</option>
+      <option value="gruppo4">Vitasolis 4000</option>
+    </select>
+
+    <button type="submit">Avanti</button>
+  </form>
+
+  <script>
+    document.getElementById('identification-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const code = document.getElementById('code').value.trim();
+  const group = document.getElementById('group').value;
+
+  if (code && group) {
+    localStorage.setItem('code', code);
+    localStorage.setItem('group', group);
+    window.location.href = "kss.html";
+  }
+});
+
+  </script>
+
+</body>
+</html>

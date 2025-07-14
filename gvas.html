@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GVAS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .question {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .question p {
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slider-container span {
+      width: 80px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      margin: 0 1rem;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, black 0%, #ccc 0%);
+      outline: none;
+      transition: background 0.3s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: black;
+      cursor: pointer;
+      border: none;
+      margin-top: -5px;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: black;
+      cursor: pointer;
+      border: none;
+    }
+
+    button {
+      display: block;
+      margin: 2rem auto 0;
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      background-color: #000000;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #000000;
+    }
+
+    #results {
+      margin-top: 2rem;
+      background-color: #e9ecef;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>GVAS</h1>
+
+  <form id="questionnaire">
+    <!-- 8 domande -->
+    <div class="question">
+      <p>1. Quanto ti senti vigile?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q1" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>2. Quanto ti senti triste?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q2" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>3. Quanto ti senti teso?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q3" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>4. Quanto sforzo ti costa fare qualcosa?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q4" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>5. Quanto ti senti felice?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q5" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>6. Quanto ti senti stanco?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q6" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>7. Quanto ti senti calmo?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q7" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <div class="question">
+      <p>8. Quanto ti senti assonnato?</p>
+      <div class="slider-container">
+        <span>Per niente</span>
+        <input type="range" name="q8" min="0" max="100" step="1" value="0">
+        <span>Moltissimo</span>
+      </div>
+    </div>
+
+    <button type="submit">Invia</button>
+  </form>
+
+  <div id="thankyou" style="display: none; text-align: center; font-size: 1.5rem; margin-top: 3rem;">
+    Grazie di aver compilato i questionari.
+  </div>
+
+
+  <script>
+    const form = document.getElementById('questionnaire');
+    const results = document.getElementById('results');
+    const sliders = document.querySelectorAll('input[type="range"]');
+
+    function updateSliderBackground(slider) {
+      const min = parseFloat(slider.min);
+      const max = parseFloat(slider.max);
+      const val = parseFloat(slider.value);
+      const percentage = ((val - min) / (max - min)) * 100;
+      slider.style.background = `linear-gradient(to right, black ${percentage}%, #ccc ${percentage}%)`;
+    }
+
+    sliders.forEach(slider => {
+      updateSliderBackground(slider);
+      slider.addEventListener('input', () => updateSliderBackground(slider));
+    }); 
+
+    form.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const formData = new FormData();
+
+  // Aggiungi i valori di code, group, kss dal localStorage
+  formData.append('code', localStorage.getItem('code') || '');
+  formData.append('group', localStorage.getItem('group') || '');
+  formData.append('kss', localStorage.getItem('kss') || '');
+
+  // Prendi i valori dal form (slider)
+  for (let i = 1; i <= 8; i++) {
+    const key = 'q' + i;
+    const input = form.querySelector(`input[name="${key}"]`);
+    if (input) {
+      const val = input.value;
+      console.log(`${key}: ${val}`);
+      formData.append(key, val);
+    } else {
+      console.warn(`Input ${key} non trovato`);
+      formData.append(key, '');
+    }
+  }
+
+  // Log completo formData
+  console.log('Tutti i dati da inviare:');
+  for (const pair of formData.entries()) {
+    console.log(pair[0] + ': ' + pair[1]);
+  }
+
+  fetch('https://script.google.com/macros/s/AKfycbwX6uztwmiMtchRbFEkhkDWEnZ7O_xjjSL4s56Jij7ZFGy8dMWeFtRdNKEPn1vIp2Lzdw/exec', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
+  })
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return response.text().then(text => {
+        throw new Error(`Errore risposta: ${response.status} - ${text}`);
+      });
+    }
+  })
+  .then(data => {
+  console.log('Success:', data);
+  form.style.display = 'none';
+  document.getElementById('thankyou').style.display = 'block';
+})
+  .catch(error => {
+    console.error('Errore fetch:', error);
+    alert("Errore nel salvataggio.");
+  });
+});
+
+
+  </script>
+</body>
+</html>
