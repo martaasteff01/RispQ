@@ -78,17 +78,18 @@
   </form>
 
   <script>
-document.getElementById('identification-form').addEventListener('submit', function (e) {
-  e.preventDefault();
-  const code = document.getElementById('code').value.trim();
-  const group = document.getElementById('group').value;
+  document.getElementById('identification-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const code = e.target.code.value;
+    const group = e.target.group.value;
 
-  if (code && group) {
-    // Salva localmente
+    // Salva in localStorage, ma NON inviare
     localStorage.setItem('code', code);
     localStorage.setItem('group', group);
-  }
-});
+
+    // Vai alla pagina KSS
+    window.location.href = "kss.html";
+  });
 
 
   </script>
